@@ -28,7 +28,7 @@ def main():
     st.title('Data Filtering Application')
     st.subheader('Choose the State')
 
-    states = ["Kerala", "Kadamba", "West Bengal", "Jammu_Kashmir", "Telengana", 
+    states = ["Kerala", "Kadamba", "westbengal", "Jammu_Kashmir", "Telengana", 
               "Rajasthan", "Northbengal", "Chandigarh", "Punjab", "Assam"]
 
     selected_state = st.selectbox('Select State', [''] + states)
