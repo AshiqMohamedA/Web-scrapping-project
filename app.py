@@ -29,7 +29,7 @@ def main():
     st.subheader('Choose the State')
 
     states = ["Kerala", "Kadamba", "West Bengal", "Jammu_Kashmir", "Telangana", 
-              "Rajasthan", "North Bengal", "Chandigarh", "Punjab", "Assam"]
+              "Rajasthan", "Northbengal", "Chandigarh", "Punjab", "Assam"]
 
     selected_state = st.selectbox('Select State', [''] + states)
 
