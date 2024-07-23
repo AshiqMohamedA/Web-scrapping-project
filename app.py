@@ -1,12 +1,14 @@
 import streamlit as st
 import pandas as pd
 import sqlite3
+
 def fetch_data(db_name, table_name):
     conn = sqlite3.connect(db_name)
     query = f"SELECT * FROM {table_name}"
     df = pd.read_sql(query, conn)
     conn.close()
     return df
+
 def filter_data(df, bus_route=None, bus_type=None, min_rating=None, max_price=None):
     filtered_df = df.copy()
 
@@ -34,30 +36,30 @@ def main():
     selected_state = st.selectbox('Select State', [''] + states)
 
     if selected_state:
-        if st.button('Continue'):
-            st.write(f"Filtering data for {selected_state}")
+        db_name = f"{selected_state.lower().replace(' ', '_')}.db"
+        table_name = selected_state.lower().replace(' ', '_')
+        
+        df = fetch_data(db_name, table_name)
 
-            db_name = f"{selected_state.lower().replace(' ', '_')}.db"
-            table_name = selected_state.lower().replace(' ', '_')
-            
-            df = fetch_data(db_name, table_name)
+        st.sidebar.header('Filters')
 
-            st.sidebar.header('Filters')
+        bus_routes = df['bus_route_name'].unique()
+        selected_route = st.sidebar.selectbox('Select Bus Route', [''] + list(bus_routes))
 
-            bus_routes = df['bus_route_name'].unique()
-            selected_route = st.sidebar.selectbox('Select Bus Route', [''] + list(bus_routes))
+        bus_types = df['bus_type'].unique()
+        selected_type = st.sidebar.selectbox('Select Bus Type', [''] + list(bus_types))
 
-            bus_types = df['bus_type'].unique()
-            selected_type = st.sidebar.selectbox('Select Bus Type', [''] + list(bus_types))
+        min_rating = st.sidebar.slider('Minimum Rating', min_value=0.0, max_value=5.0, step=0.1)
 
-            min_rating = st.sidebar.slider('Minimum Rating', min_value=0.0, max_value=5.0, step=0.1)
+        max_price = st.sidebar.number_input('Maximum Price', min_value=0.0)
 
-            max_price = st.sidebar.number_input('Maximum Price', min_value=0.0)
+        filtered_df = filter_data(df, selected_route, selected_type, min_rating, max_price)
 
-            filtered_df = filter_data(df, selected_route, selected_type, min_rating, max_price)
+        st.subheader('Filtered Bus Details')
+        st.dataframe(filtered_df)
 
-            st.subheader('Filtered Bus Details')
-            st.dataframe(filtered_df)
+        st.write(f"Number of buses filtered: {len(filtered_df)}")
 
 if __name__ == '__main__':
     main()
+
