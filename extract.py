@@ -6,12 +6,16 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException, ElementClickInterceptedException
 import pandas as pd
 import time
+
+#initialize the chrome driver
 driver = webdriver.Chrome()
 
+#webpage to scrap
 url = "https://www.redbus.in/online-booking/west-bengal-transport-corporation?utm_source=rtchometile"
 driver.get(url)
-time.sleep(5) 
+time.sleep(5) # wait for page to load 
 
+#defining the function to scroll down
 def scroll_to_load():
     last_height = driver.execute_script("return document.body.scrollHeight")
     while True:
@@ -22,6 +26,7 @@ def scroll_to_load():
             break
         last_height = new_height
 
+# defining the function to extract the route links for the current page
 def extract_route_links():
     WebDriverWait(driver, 20).until(
         EC.presence_of_all_elements_located((By.CLASS_NAME, 'route'))
@@ -34,6 +39,7 @@ def extract_route_links():
         route_links.append((href, title))
     return route_links
 
+# defining the function to navigate the next page of route links
 def navigate_to_next_page(page_num):
     try:
         next_page_button = WebDriverWait(driver, 10).until(
@@ -52,11 +58,14 @@ def navigate_to_next_page(page_num):
         print("Element click intercepted, handling overlay or pop-up.")
         return False
 
+# defining the function to extract the bus details from a specific route link
 def extract_bus_details(route_link, route_name):
     try:
         driver.get(route_link)
-        time.sleep(3)  
-        
+        time.sleep(3)  # Here it will wait for the page to load
+
+        #  Here it Scroll down the page to load all bus details
+
         last_height = driver.execute_script("return document.body.scrollHeight")
         while True:
             driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
@@ -66,7 +75,7 @@ def extract_bus_details(route_link, route_name):
                 break
             last_height = new_height
         
-        
+        #
         WebDriverWait(driver, 20).until(
             EC.presence_of_all_elements_located((By.CLASS_NAME, 'bus-item-details'))
         )
@@ -76,7 +85,8 @@ def extract_bus_details(route_link, route_name):
         
         for bus in buses_loaded:
             try:
-                
+
+                # it will extract the details of each bus
                 bus_name = bus.find_element(By.CLASS_NAME, 'travels').text.strip()
                 bus_type = bus.find_element(By.CLASS_NAME, 'bus-type').text.strip()
                 departing_time = bus.find_element(By.CLASS_NAME, 'dp-time').text.strip()
@@ -92,7 +102,8 @@ def extract_bus_details(route_link, route_name):
                 price = bus.find_element(By.CLASS_NAME, 'fare').text.strip()
                 seat_availability = bus.find_element(By.CLASS_NAME, 'seat-left').text.strip()
                 
-                
+
+                # it will store the details in a dictionary
                 bus_details = {
                     'Bus Route Name': route_name,
                     'Bus Name': bus_name,
@@ -117,36 +128,40 @@ def extract_bus_details(route_link, route_name):
     except NoSuchElementException as e:
         print(f"Element not found while extracting bus details: {e}")
         return []
-
+        
+# Here it start scrapping process
 all_route_links = []
 
-scroll_to_load()
-current_page_links = extract_route_links()
-all_route_links.extend(current_page_links)
+scroll_to_load() # it load all content on the first page
+current_page_links = extract_route_links() # it Get route links from the first page
+all_route_links.extend(current_page_links)  # it Add links to the list
 
+ # Here it Navigate through all pages and collect route links
 page_num = 2
 while navigate_to_next_page(page_num):
-    time.sleep(5)  
-    scroll_to_load()
-    current_page_links = extract_route_links()
-    all_route_links.extend(current_page_links)
+    time.sleep(5)  # wait for the next page to load
+    scroll_to_load() # it load all the content of the next page
+    current_page_links = extract_route_links() # next page  for to get route link
+    all_route_links.extend(current_page_links) # and add links to a list
     page_num += 1
 
+# it Extract bus details for each route
 all_bus_details = []
 
 for link, name in all_route_links:
     bus_details = extract_bus_details(link, name)
-    all_bus_details.extend(bus_details)
+    all_bus_details.extend(bus_details) # add bus details into list
 
-driver.quit()
+driver.quit() # it will close the browser
 
-
+#saving the bus details into as a cvs file and sql database
 if all_bus_details:
     bus_details_df = pd.DataFrame(all_bus_details)
 else:
     print("No bus details were extracted.")
     bus_details_df = pd.DataFrame()
 
+# Here it Connect to SQLite database and create table if it does not exist
 conn = sqlite3.connect('westbengal.db')
 cursor = conn.cursor()
 
@@ -168,6 +183,7 @@ cursor.execute('''
 
 conn.commit()
 
+# Here it Insert bus details into the database
 for _, row in bus_details_df.iterrows():
     cursor.execute('''
         INSERT INTO westbengal (
@@ -184,6 +200,7 @@ for _, row in bus_details_df.iterrows():
 conn.commit()
 conn.close()
 
+# Here it Save bus details to a CSV file if data is available
 if not bus_details_df.empty:
     bus_details_df.to_csv('bus_details.csv', index=False)
     print("Data saved to CSV file 'bus_details.csv'.")
