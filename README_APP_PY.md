@@ -10,7 +10,6 @@ The application connects to a SQLite database to fetch the bus details. The data
 
 ### 2. Filtering Data
 The application provides several filtering options via the sidebar:
-
 - **Bus Route**: Users can select a specific bus route from the available routes in the data.
 - **Bus Type**: Users can choose a specific type of bus from the available types in the data.
 - **Minimum Rating**: Users can set a slider to filter buses by their star rating, specifying a minimum rating threshold.
@@ -20,7 +19,6 @@ Based on the user’s input, the application filters the DataFrame to only inclu
 
 ### 3. User Interface
 The user interface is built using Streamlit and consists of the following components:
-
 - **Title and State Selection**: The main part of the application displays a title and a dropdown menu where users can select a state. This selection determines which database file will be accessed.
 - **Sidebar Filters**: The sidebar contains several filtering options. Users can set these filters to narrow down the bus details displayed.
 - **Filtered Data Display**: The filtered bus details are displayed in a table format. Additionally, the application shows the total number of buses that match the filter criteria.
@@ -35,7 +33,6 @@ Once a state is selected, the application constructs the database name based on 
 
 ### Sidebar Filters
 The sidebar provides options for users to filter the data:
-
 - **Bus Route**: A dropdown menu lists all unique bus routes in the data.
 - **Bus Type**: Another dropdown menu lists all unique bus types.
 - **Minimum Rating**: A slider allows users to set a minimum star rating for the buses.
