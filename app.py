@@ -12,9 +12,8 @@ def fetch_data(db_name, table_name):
 
 # Here the Function to filter the data based on user input
 def filter_data(df, bus_route=None, bus_type=None, min_rating=None, max_price=None):
-    filtered_df = df.copy()  # In here it Create a copy of the DataFrame to avoid modifying the original
+    filtered_df = df.copy()
 
-    # In here it Filtering by bus details if specified
     if bus_route:
         filtered_df = filtered_df[filtered_df['bus_route_name'] == bus_route]
 
@@ -22,12 +21,16 @@ def filter_data(df, bus_route=None, bus_type=None, min_rating=None, max_price=No
         filtered_df = filtered_df[filtered_df['bus_type'] == bus_type]
 
     if min_rating:
+        filtered_df['star_rating'] = pd.to_numeric(filtered_df['star_rating'], errors='coerce')
         filtered_df = filtered_df[filtered_df['star_rating'] >= min_rating]
 
-    if max_price:
+    if max_price is not None:
+        # Ensure 'price' is numeric, strip any non-numeric characters
+        filtered_df['price'] = pd.to_numeric(filtered_df['price'].replace('[^\d.]', '', regex=True), errors='coerce')
         filtered_df = filtered_df[filtered_df['price'] <= max_price]
 
     return filtered_df
+
 
 # It is the Main function to create the streamlit app
 def main():
