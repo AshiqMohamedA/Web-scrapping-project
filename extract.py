@@ -1,11 +1,11 @@
 import sqlite3
 from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By    #To locate elements by different attributes
+from selenium.webdriver.support.ui import WebDriverWait   #waiting until elements are loadedd
+from selenium.webdriver.support import expected_conditions as EC   #defining expected conditions
 from selenium.common.exceptions import TimeoutException, NoSuchElementException, ElementClickInterceptedException
 import pandas as pd
-import time
+import time #to adding a delays
 
 #initialize the chrome driver
 driver = webdriver.Chrome()
