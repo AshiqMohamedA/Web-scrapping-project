@@ -1,19 +1,21 @@
 # Bus Details Filtering Application
 
 ## Overview
-The Streamlit application is designed to filter and display bus details from a SQLite database. Users can select different filters, such as bus route, bus type, minimum rating, and maximum price, to narrow down the bus details they are interested in.
+The Streamlit application is designed to filter and display bus details from a SQLite database. Users can select different filters, such as bus route, bus type, minimum rating, maximum price, and departure time range, to narrow down the bus details they are interested in.
 
 ## Functionality Breakdown
 
 ### 1. Fetching Data
-The application connects to a SQLite database to fetch the bus details. The database name is determined based on the user's selection from a list of states. Once connected, it queries the relevant table and retrieves the data, which is then loaded into a pandas DataFrame for further processing.
+The application connects to a SQLite database to fetch bus details. The database name is determined based on the user's selection from a list of states. Once connected, it queries the relevant table and retrieves the data, which is then loaded into a pandas DataFrame for further processing.
 
 ### 2. Filtering Data
 The application provides several filtering options via the sidebar:
 - **Bus Route**: Users can select a specific bus route from the available routes in the data.
 - **Bus Type**: Users can choose a specific type of bus from the available types in the data.
 - **Minimum Rating**: Users can set a slider to filter buses by their star rating, specifying a minimum rating threshold.
+- **Minimum Price**: Users can input a minimum price value to filter buses that meet or exceed this price.
 - **Maximum Price**: Users can input a maximum price value to filter out buses that exceed this price.
+- **Departure Time Range**: Users can select a time range for departure to filter buses departing within the specified range.
 
 Based on the user’s input, the application filters the DataFrame to only include rows that meet the specified criteria.
 
@@ -36,13 +38,17 @@ The sidebar provides options for users to filter the data:
 - **Bus Route**: A dropdown menu lists all unique bus routes in the data.
 - **Bus Type**: Another dropdown menu lists all unique bus types.
 - **Minimum Rating**: A slider allows users to set a minimum star rating for the buses.
+- **Minimum Price**: An input field where users can specify a minimum price.
 - **Maximum Price**: An input field where users can specify a maximum price.
+- **Departure Time Range**: A slider to select the departure time range in minutes, which is then displayed in HH:MM format.
 
 ### Data Filtering
-The application filters the DataFrame based on the user-selected criteria. Each filter (bus route, bus type, minimum rating, and maximum price) is applied sequentially to refine the data.
+The application filters the DataFrame based on the user-selected criteria. Each filter (bus route, bus type, minimum rating, minimum price, maximum price, and departure time range) is applied sequentially to refine the data.
 
 ### Displaying Results
 The filtered bus details are displayed in the main part of the application. The DataFrame is shown in a table format, and the application also displays the number of buses that match the filter criteria.
 
 ## Conclusion
 This Streamlit application provides a user-friendly interface for filtering and viewing bus details from a SQLite database. It allows users to easily narrow down their search using multiple filter options and presents the filtered data in an organized manner. The use of pandas for data manipulation and Streamlit for the interactive interface makes it a powerful tool for users to explore bus details efficiently.
+
+
