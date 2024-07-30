@@ -65,7 +65,7 @@ def main():
     st.title('Bus Data Filtering Application')  # Application title
     st.subheader('Choose the State')  # Subheader for selecting state
 
-    states = ["Kerala", "Kadamba", "westbengal", "Jammu_Kashmir", "Telengana", 
+    states = ["Kerala", "Kadamba", "Southbengal", "Bihar", "Telengana", 
               "Rajasthan", "Northbengal", "Chandigarh", "Punjab", "Assam"]  # List of states
 
     selected_state = st.selectbox('Select State', [''] + states)  # Dropdown to select state
