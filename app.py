@@ -10,7 +10,7 @@ def convert_minutes_to_hhmm(minutes):
     return f"{hours:02d}:{mins:02d}"
 
 # Function to fetch data from SQLite database with filters applied
-def fetch_filtered_data(db_name, table_name, bus_route=None, bus_type=None, min_rating=None, min_price=None, max_price=None, start_time=None, end_time=None):
+def fetch_filtered_data(db_name, table_name, bus_route=None, bus_type=None, max_rating=None, min_price=None, max_price=None, start_time=None, end_time=None):
     conn = sqlite3.connect(db_name)
     
     # Start building the SQL query
@@ -26,9 +26,9 @@ def fetch_filtered_data(db_name, table_name, bus_route=None, bus_type=None, min_
         query += " AND bus_type = ?"
         params.append(bus_type)  # Append bus_type to parameters
     
-    if min_rating is not None:
-        query += " AND star_rating >= ?"
-        params.append(min_rating)  # Append min_rating to parameters
+    if max_rating is not None:
+        query += " AND CAST(star_rating AS REAL) < ?"  # Change to '<' for less than condition
+        params.append(max_rating)  # Append max_rating to parameters
     
     if min_price is not None:
         # Convert price format and add condition
@@ -92,7 +92,7 @@ def main():
         selected_route = st.sidebar.selectbox('Select Bus Route', [''] + bus_routes)  # Dropdown to select bus route
         selected_type = st.sidebar.selectbox('Select Bus Type', [''] + bus_types)  # Dropdown to select bus type
 
-        min_rating = st.sidebar.slider('Minimum Rating', min_value=0.0, max_value=5.0, step=0.1, value=0.0)  # Slider for minimum rating
+        max_rating = st.sidebar.slider('Maximum Rating', min_value=0.0, max_value=5.0, step=0.1, value=5.0)  # Slider for maximum rating
         min_price = st.sidebar.number_input('Minimum Price', min_value=0.0, step=1.0, value=0.0)  # Numeric input for minimum price
         max_price = st.sidebar.number_input('Maximum Price', min_value=0.0, max_value=max_price_value, step=1.0, value=max_price_value)  # Numeric input for maximum price
 
@@ -110,7 +110,7 @@ def main():
         st.sidebar.write(f"Departure Time Range: {start_time_hhmm} to {end_time_hhmm}")  # Display selected time range in HH:MM format
 
         # Fetch data with SQL filtering
-        filtered_df = fetch_filtered_data(db_name, table_name, selected_route, selected_type, min_rating, min_price, max_price, start_time_min, end_time_min)
+        filtered_df = fetch_filtered_data(db_name, table_name, selected_route, selected_type, max_rating, min_price, max_price, start_time_min, end_time_min)
 
         st.subheader('Filtered Bus Details')  # Subheader for displaying filtered bus details
         st.dataframe(filtered_df)  # Display filtered bus details in DataFrame format
