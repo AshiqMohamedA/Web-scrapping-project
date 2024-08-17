@@ -61,7 +61,7 @@ def extract_bus_details(route_link, route_name):
         # Attempt to click the "View Buses" button, if present
         try:
             view_button = WebDriverWait(driver, 10).until(
-                EC.element_to_be_clickable((By.CLASS_NAME, 'button'))  #  class name of the view button
+                EC.element_to_be_clickable((By.CLASS_NAME, 'button'))  # Replace with actual class name of the view button
             )
             view_button.click()
             time.sleep(2)  # Wait for the details to load
