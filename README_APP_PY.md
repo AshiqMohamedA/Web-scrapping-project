@@ -61,5 +61,7 @@ This project is licensed under the MIT License.
 
 ## Acknowledgments
 Streamlit Documentation
+
 MySQL Connector Python Documentation
+
 Pandas Documentation
