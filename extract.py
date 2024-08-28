@@ -1,4 +1,3 @@
-import sqlite3
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -7,6 +6,7 @@ from selenium.common.exceptions import TimeoutException, NoSuchElementException,
 import pandas as pd
 import time
 
+# Initialize the WebDriver
 driver = webdriver.Chrome()
 url = "https://www.redbus.in/online-booking/ksrtc-kerala/?utm_source=rtchometile"
 driver.get(url)
@@ -149,53 +149,10 @@ for link, name in all_route_links:
 # Quit the WebDriver
 driver.quit()
 
-# Save extracted data to SQLite and CSV
+# Save the extracted data into a DataFrame
 if all_bus_details:
     bus_details_df = pd.DataFrame(all_bus_details)
+    bus_details_df.to_csv('Kerala.csv', index=False)
+    print("Bus details extracted and saved to 'Kerala.csv' successfully.")
 else:
     print("No bus details were extracted.")
-    bus_details_df = pd.DataFrame()
-
-conn = sqlite3.connect('Kerala.db')
-cursor = conn.cursor()
-
-cursor.execute('''
-    CREATE TABLE IF NOT EXISTS Kerala (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        bus_route_name TEXT,
-        route_link TEXT,
-        bus_name TEXT,
-        bus_type TEXT,
-        departing_time DATETIME,
-        reaching_time DATETIME,
-        duration TEXT,
-        star_rating FLOAT,
-        price DECIMAL,
-        seat_availability INTEGER
-    )
-''')
-
-conn.commit()
-
-for _, row in bus_details_df.iterrows():
-    cursor.execute('''
-        INSERT INTO Kerala (
-            bus_route_name, route_link, bus_name, bus_type,
-            departing_time, reaching_time, duration, star_rating,
-            price, seat_availability
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    ''', (
-        row['Bus Route Name'], row['Route Link'], row['Bus Name'], row['Bus Type'],
-        row['Departing Time'], row['Reaching Time'], row['Duration'], row['Star Rating'],
-        row['Price'], row['Seat Availability']
-    ))
-
-conn.commit()
-conn.close()
-
-if not bus_details_df.empty:
-    bus_details_df.to_csv('Kerala.csv', index=False)
-    print("Data saved to CSV file 'Kerala.csv'.")
-else:
-    print("No bus details were saved to CSV.")
-print(bus_details_df)
