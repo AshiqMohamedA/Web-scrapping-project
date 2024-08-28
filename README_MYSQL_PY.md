@@ -78,7 +78,9 @@ python your_script_name.py
 The data will be imported into the specified MySQL database and table.
 ## Notes
 Data Types: The script stores price as VARCHAR to retain any currency symbols or prefixes.
+
 Database Credentials: Ensure your MySQL credentials are secure, especially if deploying this script in a production environment.
+
 Table Naming: The table name in the script (Kerala) should be updated based on the region or dataset you are importing.
 ## License
 This project is licensed under the MIT License.
