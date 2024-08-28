@@ -1,54 +1,71 @@
-# Bus Details Filtering Application
+## Bus Data Filtering Application
+This is a Streamlit-based web application that allows users to filter and view bus details from a MySQL database. The application provides multiple filtering options, including bus route, bus type, star rating, price range, and departure time.
 
-## Overview
-The Streamlit application is designed to filter and display bus details from a SQLite database. Users can select different filters, such as bus route, bus type, minimum rating, maximum price, and departure time range, to narrow down the bus details they are interested in.
+## Prerequisites
+Before running the application, ensure you have the following installed:
 
-## Functionality Breakdown
+Python 3.x
+Streamlit: For the web interface.
+MySQL Connector: For connecting to the MySQL database.
+## You can install the required Python packages using:
+pip install streamlit mysql-connector-python pandas
+## MySQL Setup
+Make sure you have MySQL installed and running, with a database named redbus. The database should contain tables for different states, each table storing bus data. The table structure should match the following columns:
 
-### 1. Fetching Data
-The application connects to a SQLite database to fetch bus details. The database name is determined based on the user's selection from a list of states. Once connected, it queries the relevant table and retrieves the data, which is then loaded into a pandas DataFrame for further processing.
+Bus Route Name
+Bus Name
+Bus Type
+Departing Time
+Duration
+Reaching Time
+Star Rating
+Price
+Seat Availability
+Route Link
+## Application Structure
+bus_filter_app.py: The main script containing the Streamlit app code.
+README.md: This documentation file.
+## Running the Application
+Ensure MySQL is running on your local machine with the database and tables correctly set up.
 
-### 2. Filtering Data
-The application provides several filtering options via the sidebar:
-- **Bus Route**: Users can select a specific bus route from the available routes in the data.
-- **Bus Type**: Users can choose a specific type of bus from the available types in the data.
-- **Minimum Rating**: Users can set a slider to filter buses by their star rating, specifying a minimum rating threshold.
-- **Minimum Price**: Users can input a minimum price value to filter buses that meet or exceed this price.
-- **Maximum Price**: Users can input a maximum price value to filter out buses that exceed this price.
-- **Departure Time Range**: Users can select a time range for departure to filter buses departing within the specified range.
+Update Database Connection:
 
-Based on the user’s input, the application filters the DataFrame to only include rows that meet the specified criteria.
+Ensure that the database connection details in the script match your local setup. Specifically, check the host, user, password, and database parameters in the MySQL connection calls.
+Run the Streamlit App:
 
-### 3. User Interface
-The user interface is built using Streamlit and consists of the following components:
-- **Title and State Selection**: The main part of the application displays a title and a dropdown menu where users can select a state. This selection determines which database file will be accessed.
-- **Sidebar Filters**: The sidebar contains several filtering options. Users can set these filters to narrow down the bus details displayed.
-- **Filtered Data Display**: The filtered bus details are displayed in a table format. Additionally, the application shows the total number of buses that match the filter criteria.
+## Navigate to the directory containing the script and run the following command:
 
-## Step-by-Step Process
+streamlit run bus_filter_app.py
+The application should open in your default web browser.
+## Features
+## 1. State Selection:
+Select from a list of Indian states to view the bus details specific to that region.
+## 2. Filtering Options:
+Bus Route: Select a specific bus route.
+Bus Type: Filter by the type of bus (e.g., Sleeper, AC, etc.).
+Maximum Rating: Set a maximum star rating to filter out lower-rated buses.
+Price Range: Specify minimum and maximum prices to narrow down your search.
+Departure Time Range: Select a departure time range using a slider to filter buses by their departure time.
+## 3. Data Display:
+Filtered bus details are displayed in a table with columns for each relevant attribute.
+The number of buses that match the filters is displayed.
+## Logging
+The application logs key events and errors to the console using Python's built-in logging module.
+Debugging: The application logs details such as SQL queries and the distinct values retrieved for bus routes and bus types.
+## Limitations
+Database Connection: Ensure the MySQL database is accessible from your local machine.
+SQL Injection: The application uses parameterized queries to prevent SQL injection attacks.
+Time Format: The departure time filtering assumes that the time is stored in HH:MM format in the database.
+## License
+This project is licensed under the MIT License.
 
-### Title and State Selection
-When users open the application, they see the main title and a dropdown menu for state selection. They can choose from a list of predefined states.
+## Acknowledgments
+Streamlit Documentation
+MySQL Connector Python Documentation
+Pandas Documentation
+This project is licensed under the MIT License.
 
-### Database Connection
-Once a state is selected, the application constructs the database name based on the state and connects to the corresponding SQLite database. It then queries the database to fetch all bus details and loads this data into a pandas DataFrame.
-
-### Sidebar Filters
-The sidebar provides options for users to filter the data:
-- **Bus Route**: A dropdown menu lists all unique bus routes in the data.
-- **Bus Type**: Another dropdown menu lists all unique bus types.
-- **Minimum Rating**: A slider allows users to set a minimum star rating for the buses.
-- **Minimum Price**: An input field where users can specify a minimum price.
-- **Maximum Price**: An input field where users can specify a maximum price.
-- **Departure Time Range**: A slider to select the departure time range in minutes, which is then displayed in HH:MM format.
-
-### Data Filtering
-The application filters the DataFrame based on the user-selected criteria. Each filter (bus route, bus type, minimum rating, minimum price, maximum price, and departure time range) is applied sequentially to refine the data.
-
-### Displaying Results
-The filtered bus details are displayed in the main part of the application. The DataFrame is shown in a table format, and the application also displays the number of buses that match the filter criteria.
-
-## Conclusion
-This Streamlit application provides a user-friendly interface for filtering and viewing bus details from a SQLite database. It allows users to easily narrow down their search using multiple filter options and presents the filtered data in an organized manner. The use of pandas for data manipulation and Streamlit for the interactive interface makes it a powerful tool for users to explore bus details efficiently.
-
-
+Acknowledgments
+Streamlit Documentation
+MySQL Connector Python Documentation
+Pandas Documentation
