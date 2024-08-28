@@ -10,9 +10,7 @@ ChromeDriver (compatible with your Chrome browser version)
 Required Python libraries:
 selenium
 pandas
-You can install the required Python libraries using the following command:
-
-## bash
+## You can install the required Python libraries using the following command:
 pip install selenium pandas
 
 ## Project Structure
@@ -26,9 +24,7 @@ Download and install ChromeDriver from here.
 Ensure the path to chromedriver is added to your system's PATH, or modify the script to specify the path to chromedriver.
 Run the Script:
 
-Modify the script to specify the region you want to scrape and then execute the script using Python:
-
-## bash
+## Modify the script to specify the region you want to scrape and then execute the script using Python:
 python bus_scraper.py
 
 Extracted Data:
@@ -74,4 +70,5 @@ This project is licensed under the MIT License.
 
 ## Acknowledgments
 Selenium Documentation
+
 pandas Documentation
